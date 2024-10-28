@@ -1,0 +1,27 @@
+#LaGuardia Airport (LGA) is a major airport serving New York City. LGA wanted to predict the arrival delay of an incoming flight based on the departure delay. 50 recent flights were randomly selected, and the arrival and departure delays (in minutes) were recorded.
+
+#Initialize a linear regression model for predicting arrival delay based on departure delay.
+#The code contains all imports, loads the dataset, fits the regression model, and prints the model's intercept.
+
+
+# Import packages and functions
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Import flights and remove missing values
+flights = pd.read_csv('flightsLGA.csv').dropna()
+
+# Define X and y and convert to proper format
+X = flights[['dep_delay']].values.reshape(-1, 1)
+y = flights[['arr_delay']].values.reshape(-1, 1)
+
+# Initialize a linear regression model
+linearModel = LinearRegression()
+
+# Fit the linear model
+linearModel = linearModel.fit(X, y)
+
+print('Intercept:', linearModel.intercept_[0])
+
+#output appeared as below:
+#Intercept: 1.9294083449097355
