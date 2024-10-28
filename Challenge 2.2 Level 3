@@ -1,0 +1,34 @@
+#LaGuardia Airport (LGA) is a major airport serving New York City. LGA wanted to predict the arrival delay of an incoming flight based on the departure delay. 50 recent flights were randomly selected, and the arrival and departure delays (in minutes) were recorded.
+
+#Predict the arrival delay for a flight that departed 17 minutes late, and assign variable yHat with the prediction.
+#Assign variable slope with the slope coefficient of the model.
+
+# Import packages and functions
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Import flights and remove missing values
+flights = pd.read_csv('flightsLGA.csv').dropna()
+
+# Define X and y and convert to proper format
+X = flights[['dep_delay']].values.reshape(-1, 1)
+y = flights[['arr_delay']].values.reshape(-1, 1)
+
+# Initialize a linear regression model
+linearModel = LinearRegression()
+
+# Fit the linear model
+linearModel = linearModel.fit(X, y)
+
+# Predict the arrival delay and assign the slope
+# Your code goes here
+yHat = linearModel.predict([[17]])
+slope =  linearModel.coef_
+
+print('Predicted arrival delay:', yHat[0][0])
+print('Slope coefficient:', slope[0][0])
+
+#output looked like below
+
+#Predicted arrival delay: 23.321725862064227
+#Slope coefficient: 1.1427802895424066
