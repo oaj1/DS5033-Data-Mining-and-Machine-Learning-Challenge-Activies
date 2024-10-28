@@ -1,0 +1,26 @@
+#John F. Kennedy International Airport (JFK) is a major airport serving New York City. JFK wanted to predict the arrival delay of an incoming flight based on the departure delay. 50 recent flights were randomly selected, and the arrival and departure delays (in minutes) were recorded.
+
+#Initialize a linear regression model for predicting arrival delay based on departure delay.
+#Fit the linear regression model.
+
+# Import packages and functions
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Import flights and remove missing values
+flights = pd.read_csv('flightsJFK.csv').dropna()
+
+# Define X and y and convert to proper format
+X = flights[['dep_delay']].values.reshape(-1, 1)
+y = flights[['arr_delay']].values.reshape(-1, 1)
+
+# Initialize and fit a linear regression model
+# Your code goes here
+linearModel = LinearRegression()
+linearModel.fit(X,y)
+
+
+print('Intercept:', linearModel.intercept_[0])
+
+#output looked like below
+#-1.5984053372750715
