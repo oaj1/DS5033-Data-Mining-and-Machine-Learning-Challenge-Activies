@@ -22,4 +22,8 @@ multipleModel = multipleModel.fit(X, y)
 print('Intercept:', multipleModel.intercept_)
 
 #output looks like the following
-#Intercept: [-8.53201711]
+#Intercept: [-8.53201711] 
+
+#Interpretation
+#The intercept of -8.53 means that when both distance and month are at zero, the model would predict an arrival delay of -8.53 minutes.
+#In practical terms, however, an intercept like this doesn’t hold much real-world significance, as distance and month values of zero aren’t realistic in this context.
