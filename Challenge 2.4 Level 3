@@ -1,0 +1,39 @@
+#John F. Kennedy International Airport (JFK) is a major airport serving New York City. JFK wanted to predict the arrival delay of an incoming flight based on the departure delay. 50 recent flights were randomly selected, and the arrival delays (in minutes) were recorded.
+
+#Predict the arrival delay for a flight with distance of 305 and air travel time of 217, and assign variable yHat with the prediction.
+#Calculate the slope coefficients for multipleModel and assign slope with the result.
+
+# Import packages and functions
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Import flights and remove missing values
+flights = pd.read_csv('flightsJFK.csv').dropna()
+
+# Define X and y and convert to proper format
+X = flights[['distance', 'air_time']].values.reshape(-1, 2)
+y = flights[['arr_delay']].values.reshape(-1, 1)
+
+# Initialize a linear regression model
+multipleModel = LinearRegression()
+
+# Fit the linear model
+multipleModel = multipleModel.fit(X, y)
+
+# Predict the arrival delay and save the slope coefficient
+# Your code goes here
+yHat = multipleModel.predict([[305,217]])
+slope = multipleModel.coef_
+
+print('Predicted arrival delay:', yHat)
+print('Slope coefficients:', slope)
+
+
+#output looks like the following
+#Predicted arrival delay: [[105.71599547]]
+#Slope coefficients: [[-0.0800285   0.40886021]]
+
+#Interpretation
+#The predicted arrival delay of 105.72 minutes is the model's estimate 
+#for each 1-minute increase in departure delay, the arrival delay decreases by approximately 0.08 minutes, assuming distance remains constant
+#for each additional mile traveled, the arrival delay increases by approximately 0.41 minutes, holding dep_delay constant.
