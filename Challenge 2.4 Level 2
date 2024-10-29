@@ -1,0 +1,25 @@
+#LaGuardia Airport (LGA) is a major airport serving New York City. LGA wanted to predict the arrival delay of an incoming flight based on the departure delay. 50 recent flights were randomly selected, and the arrival delays (in minutes) were recorded.
+
+#Create a dataframe containing distance (distance) and month (month) in that order. Use the reshape() function to ensure the input features are in the proper format.
+
+# Import packages and functions
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+
+# Import flights and remove missing values
+flights = pd.read_csv('flightsLGA.csv').dropna()
+
+# Define X and y and convert to proper format
+X = flights[['distance','month']].values.reshape(-1, 2)
+y = flights[['arr_delay']].values.reshape(-1, 1)
+
+# Initialize a linear regression model
+multipleModel = LinearRegression()
+
+# Fit the linear model
+multipleModel = multipleModel.fit(X, y)
+
+print('Intercept:', multipleModel.intercept_)
+
+#output looks like the following
+#Intercept: [-8.53201711]
