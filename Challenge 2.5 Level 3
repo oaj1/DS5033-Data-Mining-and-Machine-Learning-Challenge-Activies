@@ -1,0 +1,52 @@
+#The World Happiness Report ranks 155 countries based on data from the Gallup World Poll. People completing the survey are asked to rate their current lives, which is averaged across countries to produce a rating on a scale from 0 (worst possible) to 10 (best possible).
+#Print the intercept and weights for an elastic net regression model.
+#Predict the happiness score for a country with standardized family = -1.07 and generosity = 0.16.
+
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import ElasticNet
+
+# Load the world happiness dataset
+happiness = pd.read_csv("world_happiness_2017.csv")
+
+# Define input and output features
+X = happiness[['family', 'generosity']]
+y = happiness[['happiness_score']]
+
+# Scale the input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Initialize an elastic net regression model
+modelENet = ElasticNet()
+
+# Fit the model 
+modelENet.fit(X,y)
+
+# Estimated intercept weight
+print(modelENet.intercept_)
+
+# Estimated weights for input features
+print(modelENet.coef_)
+
+# Predict the happiness score for a country with standardized family = -1.07 and generosity = 0.16
+#-1.07 is the standardized value for the family feature.
+#0.16 is the standardized value for the generosity feature.
+#The result of modelENet.predict() is a prediction for the happiness_score based on the input values.
+print(modelENet.predict([[-1.07, 0.16]]))
+
+
+#output looks as follows
+#[5.26808]
+#[0.2492543 0.       ]
+#[5.0013779]
+
+
+#Interpretation
+#5.26808, This is the intercept of the model. It represents the baseline happiness_score when all input features (family and generosity) are zero after standardization
+#0.2492543 0. These are the coefficients (weights) for the features family and generosity, respectively. 0.2492543 for family indicates that for a one-unit increase in the standardized family score, the predicted happiness_score increases by approximately 0.2493.
+#0.0 for generosity means that the model has effectively ignored the generosity feature in making predictions. 
+#5.0013779. It shows that, given the values of family and generosity in the input, the predicted happiness score is approximately 5.0014
