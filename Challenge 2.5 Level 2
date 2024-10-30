@@ -1,0 +1,44 @@
+#The World Happiness Report ranks 155 countries based on data from the Gallup World Poll. People completing the survey are asked to rate their current lives, which is averaged across countries to produce a rating on a scale from 0 (worst possible) to 10 (best possible).
+
+#Initialize an elastic net regression model with alpha=36 and l1_ratio=0.07.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import ElasticNet
+
+# Load the world happiness dataset
+happiness = pd.read_csv("world_happiness_2017.csv")
+
+# Define input and output features
+X = happiness[['family', 'economy_gdp_per_capita']]
+y = happiness[['happiness_score']]
+
+# Scale the input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Initialize an elastic net regression model with alpha=36 and l1_ratio=0.07
+#Notes: The alpha score (as it increases) simplifies the model by shrinking the coefficients, which can lead to some being close to or exactly zero (especially with Lasso regularization). 
+#This helps in reducing overfitting, but if alpha is too high, the model may underfit the data and lose predictive accuracy.
+#For the l1_ratio ranges from 0 to 1, The l1_ratio parameter in Elastic Net defines the balance between Lasso (L1) and Ridge (L2) regularization.
+#Here, l1_ratio=0.07 means that 7% of the regularization comes from Lasso (L1), and 93% comes from Ridge (L2).
+#This low L1 ratio means that the model will mostly perform Ridge-like regularization, favoring small coefficients but less likely to zero out any features.
+happinessModel = ElasticNet(alpha=36,l1_ratio=0.07)
+
+# Fit the model 
+happinessModel.fit(X,y)
+
+# Estimated intercept weight
+print(happinessModel.intercept_)
+
+# Estimated weights for features
+print(happinessModel.coef_)
+
+#output
+#[5.21451001]
+#[0. 0.]
+#interpretation
+#This value is the model’s intercept. It represents the predicted happiness_score when the generosity feature is 0 (after scaling).
+#In this case, the intercept is approximately 5.21451001, suggesting that the base happiness_score (independent of generosity) is around this value.
