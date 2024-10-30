@@ -1,0 +1,41 @@
+#The World Happiness Report ranks 155 countries based on data from the Gallup World Poll. People completing the survey are asked to rate their current lives, which is averaged across countries to produce a rating on a scale from 0 (worst possible) to 10 (best possible).
+
+#Initialize an elastic net regression model.
+#Fit the model to the given input and output features.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import ElasticNet
+
+# Load the world happiness dataset
+happiness = pd.read_csv("world_happiness_2017.csv")
+
+# Define input and output features
+X = happiness[['generosity']]
+y = happiness[['happiness_score']]
+
+# Scale the input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+
+# Initialize an elastic net regression model
+modelENet = ElasticNet()
+
+# Fit the model 
+modelENet.fit(X,y)
+
+# Estimated intercept weight
+print(modelENet.intercept_)
+
+# Estimated weight for generosity feature
+print(modelENet.coef_)
+
+#output below
+#[5.35324999]
+#[0.]
+
+#Interpretation
+#This value is the model’s intercept. It represents the predicted happiness_score when the generosity feature is 0 (after scaling).
+#In this case, the intercept is approximately 5.35, suggesting that the base happiness_score (independent of generosity) is around this value.
