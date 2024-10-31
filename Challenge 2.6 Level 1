@@ -1,0 +1,42 @@
+#The tips dataset contains information about meals and tips at a diner. The data includes bill in dollars, tip in dollars, sex of the bill payer, whether there were smokers in the party, day of the week, time of day, and size of the party.
+
+#Create a dataframe X with input features size and total_bill.
+#Create a dataframe y with output feature day.
+#Flatten y into an array using np.ravel().
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.naive_bayes import GaussianNB
+
+# Load the tips dataset
+tipsData = pd.read_csv('tips.csv')
+
+# Create a dataframe X containing 'size' and 'total_bill'
+X = tipsData[['size','total_bill']]
+
+# Create a dataframe y containing day
+y = tipsData[['day']]
+
+# Flatten y into an array
+yFlat = np.ravel(y)
+
+print(X.head())
+print(yFlat)
+
+#output
+#  size  total_bill
+#0     2       14.78
+#1     3       20.90
+#2     2       17.51
+#3     5       41.19
+#4     3       31.27
+#['Sun' 'Sun' 'Sun' 'Thur' 'Sat' 'Sat' 'Sat' 'Sun' 'Sat' 'Sat' 'Sun' 'Thur'
+# 'Sun' 'Sat' 'Sat' 'Thur' 'Thur' 'Sun' 'Sun' 'Sat' 'Sat' 'Sun' 'Sun' 'Sat'
+# 'Sun' 'Sun' 'Sun' 'Thur' 'Thur' 'Sun' 'Sat' 'Sun' 'Sun' 'Thur' 'Fri'
+# 'Thur' 'Sat' 'Sat' 'Sat' 'Sat' 'Thur' 'Sat' 'Fri' 'Fri' 'Thur' 'Sun'
+# 'Sat' 'Sat' 'Sun' 'Thur']
+
+#interpretation
+#X contains the features size and total_bill, which describe each instance
+#yFlat is the target variable, representing the day each instance was recorded.
