@@ -1,0 +1,34 @@
+#Researchers studying chemical properties of wines collected data on a sample of white wines in northern Portugal. One of the research goals was to cluster wines based on similar chemical properties.
+#Fit the k-means clustering model to cluster wines based on volatile acidity (volatile_acidity) and citric acid (citric_acid).
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+
+# Read in the data
+wines = pd.read_csv('whitewine.csv')
+
+# Seed random number generator
+rng = np.random.RandomState(25)
+
+# Initialize k-means clustering model
+kModel = KMeans(n_clusters=4, random_state=rng)
+
+kModel = kModel.fit(wines[['volatile_acidity','citric_acid']])
+
+print(kModel.cluster_centers_)
+
+#output
+#[[0.35       0.3       ]
+# [0.20333333 0.344     ]
+# [0.30666667 0.49      ]
+# [0.28285714 0.22428571]]
+
+#interpretation 
+#the centroids of clusters from a k-means clustering model, which was fitted using two features: volatile acidity and citric acid from a dataset on white wines.
+#Rows 1-4, correspond to the different clusters (4 clusters)
+#values corresponding to the mean volatile acidity and citric acid for the wines in that cluster.
+#By analyzing these clusters, researchers can see patterns and trends in the chemical properties of the wines, potentially associating each cluster with certain flavor profiles or quality levels.
