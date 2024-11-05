@@ -1,0 +1,36 @@
+#Researchers studying chemical properties of wines collected data on a sample of white wines in northern Portugal. One of the research goals was to cluster wines based on similar chemical properties.
+#Initialize a k-means clustering model with n_clusters=4 and random_state=rng.
+#Fit the model to cluster wines based on free sulfur dioxide (free_sulfur_dioxide) and alcohol concentration (alcohol).
+
+import warnings
+warnings.filterwarnings("ignore")
+
+import pandas as pd
+import numpy as np
+from sklearn.cluster import KMeans
+
+# Read in the data
+wines = pd.read_csv('whitewine.csv')
+
+# Seed random number generator
+rng = np.random.RandomState(43)
+
+# Your code goes here
+kmeansModel = KMeans(n_clusters=4, random_state=rng)
+kmeansModel = kmeansModel.fit(wines[['free_sulfur_dioxide','alcohol']])
+
+print(kmeansModel.labels_[0:5])
+
+#output
+#[3 1 2 2 2]
+
+#interpretation
+#[3 1 2 2 2]
+#The output [3, 1, 2, 2, 2] represents the cluster labels assigned to a subset of wines in your dataset after fitting the k-means clustering model with 
+#n_clusters=4 on the features free sulfur dioxide and alcohol concentration.
+#Cluster Labels: Each number in the array corresponds to a specific cluster (from 0 to 3, since you specified 4 clusters). For instance:
+
+#3 means the first wine was assigned to Cluster 3.
+#1 means the second wine was assigned to Cluster 1.
+#2 means the third, fourth, and fifth wines were all assigned to Cluster 2.
+#By clustering the wines in this way, researchers could potentially associate each cluster with specific quality indicators, taste profiles, or storage recommendations based on sulfur dioxide and alcohol content.
