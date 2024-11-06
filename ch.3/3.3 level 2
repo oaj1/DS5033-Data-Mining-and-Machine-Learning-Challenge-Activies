@@ -1,0 +1,43 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. Using a computer vision process, 16 features of each bean were extracted.
+#Print the centroids of each cluster from the fitted k-means clustering model modelKmeans.
+#Print the total inertia of the fitted k-means clustering model modelKmeans.
+
+import warnings
+warnings.filterwarnings("ignore")
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+# Load the dry beans dataset
+bean = pd.read_csv('Dry_Bean_Dataset.csv')
+
+# Subset input features Perimeter and Area
+X = bean[['Perimeter', 'Area']]
+
+# Use StandardScaler() to standardize input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+X = pd.DataFrame(X)
+
+# Initialize a k-means clustering model with k=5 and random_state=22
+modelKmeans = KMeans(n_clusters=5, random_state=22)
+
+# Fit the model to the input features
+modelKmeans.fit(X)
+
+# Print the cluster centroids
+print("Centroids:",modelKmeans.cluster_centers_)
+
+# Print the inertia
+print("Inertia:", modelKmeans.inertia_)
+
+#output
+#Centroids: [[ 2.0433478   2.16963202]
+# [-0.46072619 -0.50853158]
+# [ 0.2062379  -0.00260733]
+# [-1.0947962  -0.85690857]
+# [-0.8322496  -0.67363922]]
+# Inertia: 10.835882815864426
