@@ -1,0 +1,43 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. Using a computer vision process, 16 features of each bean were extracted.
+#Initialize a k-means clustering model with k = 6 and random_state=74.
+#Fit the model to the standardized input features in X.
+
+import warnings
+warnings.filterwarnings("ignore")
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+# Load the dry beans dataset
+bean = pd.read_csv('Dry_Bean_Dataset.csv')
+
+# Subset input features Extent and Eccentricity
+X = bean[['Extent', 'Eccentricity']]
+
+# Use StandardScaler() to standardize input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+X = pd.DataFrame(X)
+
+# Initialize a k-means clustering model with k=6 and random_state=74
+beanKmeans = KMeans(n_clusters = 6, random_state = 74)
+
+# Fit the model to the input features
+beanKmeans = beanKmeans.fit(X)
+
+# Print the cluster centroids
+print("Centroids:", beanKmeans.cluster_centers_)
+
+#output
+#Centroids: [[ 0.76335716 -0.20292491]
+ #[-1.12832124  0.50796721]
+ #[ 0.5135801  -2.15492509]
+ #[-0.21170094  0.13556884]
+ #[ 0.83113727  0.66070126]
+ #[-2.47852301  1.15805621]]
+
+ #Interpretation
+ #The output represents the coordinates of centroids for six clusters, each with a two-dimensional coordinate in the form (x,y). 
