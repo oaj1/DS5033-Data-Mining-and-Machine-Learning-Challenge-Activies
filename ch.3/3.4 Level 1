@@ -1,0 +1,60 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans.
+#Using a computer vision process, 16 features of each bean were extracted.
+
+#Initialize a DBSCAN clustering model using scikit-learn with 
+# Epsilon = 3 and 
+# minimum = 14.
+#Fit the model to the standardized input features in X.
+#Print the cluster labels.
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import DBSCAN
+
+# Load the dry beans dataset
+bean = pd.read_csv('Dry_Bean_Dataset.csv')
+
+# Subset input features Compactness and Eccentricity
+X = bean[['Compactness', 'Eccentricity']]
+
+# Use StandardScaler() to standardize input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+X = pd.DataFrame(X)
+
+# Initialize a DBSCAN clustering model in scikit-learn with epsilon = 3, m = 14
+dbscanBean = DBSCAN(eps=3, min_samples=14)
+
+# Fit the model to the input features
+dbscanBean = dbscanBean.fit(X)
+
+# Print the cluster labels 
+labels = dbscanBean.labels_
+print('Labels:', labels)
+
+# Print the number of core points 
+print('Number of core points:', len(dbscanBean.core_sample_indices_))
+
+# Print parameter values
+print(dbscanBean.get_params())
+
+#output
+#Labels: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ #0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+#Number of core points: 100
+#{'algorithm': 'auto', 'eps': 3, 'leaf_size': 30, 'metric': 'euclidean', 'metric_params': None, 'min_samples': 14, 'n_jobs': None, 'p': None}
+
+
+#Interpretation
+#DBSCAN (Density-Based Spatial Clustering of Applications with Noise) groups data points into clusters based on density. It uses two main parameters:
+#eps (epsilon): This defines the maximum distance between two points for them to be considered as part of the same neighborhood.
+#min_samples: This is the minimum number of points required to form a dense region (i.e., a cluster).
+#In this case:
+#eps = 3: Points within a distance of 3 from each other can belong to the same cluster.
+#min_samples = 14: A region needs at least 14 points to be considered dense enough to form a cluster.
+
+#The Labels array shows that all points are labeled with 0, indicating they all belong to a single cluster, thus all datapoints fall within a dense area, no outliers
+#I have 100 core points here, meaning that 100 points meet the criteria of having at least 14 neighbors within a distance of 3.
