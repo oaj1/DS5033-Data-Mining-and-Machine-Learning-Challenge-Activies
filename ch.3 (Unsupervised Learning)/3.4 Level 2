@@ -1,1 +1,49 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. 
+#Using a computer vision process, 16 features of each bean were extracted.
+#Initialize a mean-shift clustering model using scikit-learn with a bandwidth of 2.5.
+#Fit the model to the standardized input features in X.
+#Print the cluster centers.
 
+import warnings
+warnings.filterwarnings("ignore")
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import MeanShift
+
+# Load the dry beans dataset
+bean = pd.read_csv('Dry_Bean_Dataset.csv')
+
+# Subset input features Eccentricity and Extent
+X = bean[['Eccentricity', 'Extent']]
+
+# Use StandardScaler() to standardize input features
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+X = pd.DataFrame(X)
+
+# Initialize a mean-shift clustering model in scikit-learn with a bandwidth of 2.5
+modelMeanshift = MeanShift(bandwidth=2.5)
+
+# Fit the model to the input features
+modelMeanshift = modelMeanshift.fit(X)
+
+# Print the cluster centers
+centers = modelMeanshift.cluster_centers_
+print('Centers:', centers)
+
+# Print the cluster labels
+print('Cluster labels:', modelMeanshift.labels_)
+
+#output
+#Centers: [[0.05561953 0.15485362]]
+#Cluster labels: [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+# 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+
+#Interpretation
+#Centers: [[0.05561953 0.15485362]]: The output shows a single cluster center at coordinates (0.0556, 0.1549)
+#This means that, after clustering, Mean Shift identified only one cluster center.
+#Cluster labels: [0 0 0 0 ...]: All beans have been assigned the label 0, indicating that they all belong to the same cluster.
