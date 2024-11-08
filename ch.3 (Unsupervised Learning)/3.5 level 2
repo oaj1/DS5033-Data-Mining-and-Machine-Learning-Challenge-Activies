@@ -1,0 +1,27 @@
+#Researchers studying chemical properties of wines collected data on a sample of white wines in Northern Portugal. A research goal was to cluster wines based on similar chemical properties.
+#Use the DBSCAN clustering function to cluster wines. Keep eps and min_samples at default values.
+#Fit the DBSCAN model to cluster wines.
+
+import pandas as pd
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+wine = pd.read_csv('wine1.csv')
+
+# Create an input matrix with selected features
+X = wine[['citric_acid', 'total_sulfur_dioxide']]
+
+scaler = StandardScaler()
+X = pd.DataFrame(scaler.fit_transform(X))
+
+dbModel = DBSCAN()
+
+dbModel.fit(X)
+
+print(dbModel.labels_)
+
+#output
+#[-1 -1  0 -1  0  0 -1  0 -1 -1  0  0  0 -1 -1  0 -1  0  0 -1 -1  0  0 -1 0 -1 -1 -1]
+
+#interpretation
+#In this output, DBSCAN successfully identified one cluster (labeled as 0) and labeled some points as noise (indicated by -1).
