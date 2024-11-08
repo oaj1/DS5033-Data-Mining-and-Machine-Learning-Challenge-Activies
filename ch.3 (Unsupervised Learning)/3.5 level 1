@@ -1,0 +1,31 @@
+#Researchers studying chemical properties of wines collected data on a sample of white wines in Northern Portugal. A research goal was to cluster wines based on similar chemical properties.
+#Fit the DBSCAN model to cluster wines.
+
+import pandas as pd
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
+
+wine = pd.read_csv('wine1.csv')
+
+# Create an input matrix with selected features
+X = wine[['alcohol', 'fixed_acidity']]
+
+scaler = StandardScaler()
+X = pd.DataFrame(scaler.fit_transform(X))
+
+# Cluster using DBSCAN with default options
+dbscanModel = DBSCAN()
+
+# Your code goes here
+dbscanModel.fit(X)
+
+print(dbscanModel.labels_)
+
+
+#ouptut
+#[-1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+# -1 -1 -1 -1 -1]
+
+#interpretation
+#This output from running DBSCAN suggests that all of the data points in your wine dataset were labeled as -1,
+#which indicates that they were classified as "noise" and did not belong to any cluster.
