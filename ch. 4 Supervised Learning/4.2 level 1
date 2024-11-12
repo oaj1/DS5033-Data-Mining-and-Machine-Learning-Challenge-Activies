@@ -1,0 +1,41 @@
+#Heart disease is one of the leading causes of death in the United States. Developing early diagnostic tools for heart disease may save thousands of lives every year.
+#The heart dataset contains data from a sample of medical records in the United States, Hungary, and Switzerland. For each patient, target=0 if the patient does not have heart disease and target=1 if the patient does have heart disease.
+#Initialize a k-nearest neighbors classifier, knnModel, with k = 7.
+
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+
+# Load the heart dataset
+heart = pd.read_csv('heart.csv')
+
+# Create a dataframe X containing thalach and trestbps
+X = heart[['thalach', 'trestbps']]
+
+# Scale the input features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Output feature: target
+y = heart[['target']]
+
+# Initialize the model
+knnModel = KNeighborsClassifier(n_neighbors=7)
+
+# Print model parameters
+print(knnModel.get_params())
+
+
+#output
+#{'algorithm': 'auto', 'leaf_size': 30, 'metric': 'minkowski', 'metric_params': None, 'n_jobs': None, 'n_neighbors': 7, 'p': 2, 'weights': 'uniform'}
+
+#interpretation
+#algorithm: 'auto' – The algorithm used to compute nearest neighbors will be selected automatically based on the dataset.
+#leaf_size: 30 – Affects the speed of the tree-based algorithms. Lower values use more memory, while higher values use less memory but can be slower.
+#metric: 'minkowski' – The distance metric is Minkowski, which generalizes both Euclidean and Manhattan distances.
+#n_neighbors: 7 – This is the value of k, indicating that the 7 nearest neighbors will be considered for classification.
+#p: 2 – Specifies the power parameter for the Minkowski metric (2 means Euclidean distance; 1 would mean Manhattan distance).
+#weights: 'uniform' – Each neighbor has an equal weight in the voting, rather than weighting closer neighbors more heavily.
