@@ -1,0 +1,34 @@
+#This dataset contains data on sleep habits for 29 randomly selected mammals. Each mammal is categorized as an omnivore, herbivore, carnivore, or insectivore.
+#Fit the provided k-nearest neighbors model.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+# Import dataset
+sleep = pd.read_csv('sleep.csv')
+
+# Create input matrix X and output matrix y
+X = sleep[['bodywt', 'sleep_rem']]
+y = sleep[['vore']]
+
+knnModel = KNeighborsClassifier(n_neighbors=6)
+
+# Your code goes here
+knnModel = knnModel.fit(X,np.ravel(y))
+
+# Print predictions
+print(knnModel.predict(X))
+
+#personal aside as a reminder for myself
+#The fit() method is used to fit the already defined k-nearest neighbors model. 
+#The np.ravel() function from numpy reformats the categories into the appropriate shape.
+
+
+#output
+#['herbi' 'carni' 'herbi' 'herbi' 'omni' 'omni' 'omni' 'carni' 'herbi'
+# 'omni' 'carni' 'carni' 'omni' 'carni' 'herbi' 'herbi' 'omni' 'herbi'
+# 'omni' 'herbi' 'omni' 'omni' 'carni' 'herbi' 'omni' 'omni' 'omni' 'herbi'
+# 'omni']
