@@ -1,0 +1,31 @@
+#This dataset contains data on sleep habits for 22 randomly selected mammals. Each mammal is categorized as an omnivore, herbivore, carnivore, or insectivore.
+#Initialize a k-nearest neighbors classification model with k=3.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+# Import dataset
+sleep = pd.read_csv('sleep.csv')
+
+# Create input matrix X and output matrix y
+X = sleep[['awake', 'sleep_rem']]
+y = sleep[['vore']]
+
+knnModel = KNeighborsClassifier(n_neighbors = 3)
+
+knnModel = knnModel.fit(X, np.ravel(y))
+
+# Print predictions
+print(knnModel.predict(X))
+
+#output
+#['herbi' 'omni' 'omni' 'omni' 'herbi' 'herbi' 'herbi' 'omni' 'herbi'
+# 'carni' 'omni' 'herbi' 'omni' 'herbi' 'herbi' 'carni' 'carni' 'herbi'
+# 'carni' 'omni' 'herbi' 'omni']
+
+#interpretation
+#The output array shows the predicted diet categories for each mammal in the dataset, 
+#using abbreviations like 'herbi' for herbivore, 'omni' for omnivore, and 'carni' for carnivore.
