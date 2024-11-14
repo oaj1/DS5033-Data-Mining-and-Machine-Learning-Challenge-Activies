@@ -1,0 +1,40 @@
+#The US Forest Service regularly monitors weather conditions to predict which areas are at risk of wildfires. Data scientists working with the US Forest Service would like to predict whether a wildfire will occur based on drought level, moisture content at ground level, and moisture content below ground level.
+#Apply the pre-defined scaler function to the matrix of input features, X. Assign the scaled inputs to XScaled.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+# Import dataset
+fires = pd.read_csv('fires.csv')
+
+# Create input matrix X and output matrix y
+X = fires[['drought', 'ground_moisture', 'below_moisture']]
+y = np.ravel(fires['fire'])
+
+# Define a scaling function
+scaler = StandardScaler()
+XScaled = scaler.fit_transform(X)
+
+# Print the scaled input features
+print(XScaled)
+
+#output:
+#[-0.35292609  0.43203056 -0.48133598]
+# [-0.78201555 -2.3582704  -0.84419168]
+# [-0.79095492 -1.67467774 -0.78108634]
+# [-0.75340959 -0.46285438 -0.37090163]
+# [-0.326108    0.95404678 -0.20525012]
+# [-0.78201555 -0.51878469 -0.71009284]
+# [-0.56389507  0.68060971 -0.3314608 ] keeps going
+
+#Interpretation
+#When you apply the StandardScaler to the input matrix X, it scales each feature (in this case, drought, ground_moisture, and below_moisture) so that each feature:
+#Has a mean of 0
+#Has a standard deviation of 1
+#Each row corresponds to a different instance (or observation) in your dataset, and the three values represent the standardized values for the features drought, ground_moisture, and below_moisture for that instance.
+#Negative values indicate that the feature value is below the mean for that feature.
+#Positive values indicate that the feature value is above the mean for that feature.
+#Values close to 0 suggest that the feature value is near the mean for that feature.
+#Standardization ensures that features with larger scales (e.g., drought levels in large numbers) do not dominate the model simply due to their magnitude.
