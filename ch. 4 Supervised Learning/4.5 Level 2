@@ -1,0 +1,39 @@
+#The US Forest Service regularly monitors weather conditions to predict which areas are at risk of wildfires. Data scientists working with the US Forest Service would like to predict whether a wildfire will occur based on moisture content below ground level, drought level, and daily rainfall.
+
+#Initialize SVCModel, a support vector machine classifier, with a linear kernel.
+#Fit the support vector machine classifier to the scaled inputs, XScaled.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+
+# Import dataset
+fires = pd.read_csv('fires.csv')
+
+# Create input matrix X and output matrix y
+X = fires[['below_moisture', 'drought', 'rain']]
+y = np.ravel(fires['fire'])
+
+# Define and apply a scaling function
+scaler = StandardScaler()
+XScaled = scaler.fit_transform(X)
+
+# Initialize and fit the linear SVC model
+SVCModel = SVC(kernel = 'linear')
+SVCModel = SVCModel.fit(XScaled,y)
+
+# Print the scaled input features
+print(SVCModel.predict(XScaled))
+
+#output
+#[0 0 1 1 0 0 0 0 0 0 1 0 0 1 0 1 1 1 1 1 1 0 1 0 0 0 0 1 1 1 1 1 0 0 0 0 1
+# 1 1 0 1 1 1 0 1 1 0 0 0 1 1 0 1 1 1 1 1 0 1 0 0 1 0 1 0 1 1 1 0 0 0 0 0 1
+# 0 1 1 1 1 0 0 0 0 1 1 1 0 0 0 0 0 1 1 1 0 0 0 0 1 1 1 0 1 1 0 1 0 1 0 1 0
+# 1 0 1 0 0 1 0 1 0 1 0]
+
+#Interpretation
+#Each element in this array corresponds to the prediction for a single observation in the dataset. For example:
+#0 indicates that the model predicted no wildfire (i.e., no fire occurred).
+#1 indicates that the model predicted a wildfire occurred.
