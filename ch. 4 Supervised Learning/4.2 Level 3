@@ -1,0 +1,49 @@
+#Heart disease is one of the leading causes of death in the United States. Developing early diagnostic tools for heart disease may save thousands of lives every year.
+#The heart dataset contains data from a sample of medical records in the United States, Hungary, and Switzerland. For each patient, target=0 if the patient does not have heart disease and target=1 if the patient does have heart disease.
+#Fit heartknnOriginal to input features X and output y , with y formatted as an array.
+#Fit heartknnScaled to input features X_scaled and output y, with y formatted as an array.
+#Print the proportion of correctly predicted instances from heartknnScaled.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
+
+# Load the heart dataset
+heart = pd.read_csv('heart.csv')
+
+# Create a dataframe X containing age and trestbps
+X = heart[['age', 'trestbps']]
+
+# Scale the input features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Output feature: target
+y = heart[['target']]
+
+# Initialize the models
+heartknnOriginal = KNeighborsClassifier(n_neighbors=9)
+heartknnScaled = KNeighborsClassifier(n_neighbors=9)
+
+# Fit the original knn model to X and y
+heartknnOriginal = heartknnOriginal.fit(X,np.ravel(y))
+
+# Fit the scaled knn model to X_scaled and y
+heartknnScaled = heartknnScaled.fit(X_scaled,np.ravel(y))
+
+# Print proportion of instances classified correctly using X
+print(heartknnOriginal.score(X,y))
+
+# Print proportion of instances classified correctly using X_scaled
+print(heartknnScaled.score(X_scaled, y))
+
+
+#output
+#0.64
+#0.64
+
+#interpretation
+#Accuracy for original data (unscaled): The model trained on the original data (age and trestbps) achieved an accuracy of 64%.
+#Accuracy for scaled data: The model trained on the scaled version of the same features (age and trestbps) also achieved an accuracy of 64%.
