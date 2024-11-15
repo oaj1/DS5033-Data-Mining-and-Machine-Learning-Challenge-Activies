@@ -1,0 +1,40 @@
+#Heart disease is one of the leading causes of death in the United States. Developing early diagnostic tools for heart disease may save thousands of lives every year.
+
+#The heart dataset contains data from a sample of medical records in the United States, Hungary, and Switzerland. For each patient, target=0 if the patient does not have heart disease and target=1 if the patient does have heart disease.
+
+#Fit a support vector classifier heartSVC with C=0.1 and penalty='l2' to the training set.
+#Print the weights W0, W1, and W2.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
+
+# Load the heart dataset
+heart = pd.read_csv('heart.csv')
+
+# Create a dataframe X containing thalach and trestbps
+X = heart[['thalach', 'trestbps']]
+
+# Output feature: target
+y = heart[['target']]
+
+# Create training and testing data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=3)
+
+# Scale the input features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Initialize the model
+heartSVC = LinearSVC(C=0.1, penalty='l2', max_iter = 3000, random_state=3)
+
+# Fit the model
+heartSVC = heartSVC.fit(X_train,np.ravel(y_train))
+
+# Print the model weights
+print('w0:', heartSVC.intercept_)
+print('w1 and w2:', heartSVC.coef_)
