@@ -1,0 +1,41 @@
+#Heart disease is one of the leading causes of death in the United States. Developing early diagnostic tools for heart disease may save thousands of lives every year.
+#The heart dataset contains data from a sample of medical records in the United States, Hungary, and Switzerland. For each patient, target=0 if the patient does not have heart disease and target=1 if the patient does have heart disease.
+#Initialize a support vector classifier SVCModel with C=5 and penalty='l2'.
+#Set the maximum number of iterations to 3000 and random_state = 7.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
+
+# Load the heart dataset
+heart = pd.read_csv('heart.csv')
+
+# Create a dataframe X containing chol and age
+X = heart[['chol', 'age']]
+
+# Output feature: target
+y = heart[['target']]
+
+# Create training and testing data
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=7)
+
+# Scale the input features
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Initialize the model
+SVCModel = LinearSVC(C=5, penalty='l2', max_iter=3000, random_state=7)
+#LinearSVC is used here because it allows setting penalty='l2', which is the default for SVMs.
+#The parameter C=5 controls the regularization strength (with lower values indicating stronger regularization).
+#max_iter=3000 sets the maximum number of iterations for the solver.
+#random_state=7 ensures reproducibility of results.
+
+# Print model parameters
+print(SVCModel.get_params())
+
+#output
+#{'C': 5, 'class_weight': None, 'dual': True, 'fit_intercept': True, 'intercept_scaling': 1, 'loss': 'squared_hinge', 'max_iter': 3000, 'multi_class': 'ovr', 'penalty': 'l2', 'random_state': 7, 'tol': 0.0001, 'verbose': 0}
