@@ -1,0 +1,56 @@
+#Researchers collected measurements from loblolly pines.
+
+#Generate 46 bootstrap samples of size 36 using the resample() method with the following parameters: the dataset, replace set to True, n_samples set to the specified bootstrap sample size, and random_state set to rng.
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.utils import resample
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+rng = np.random.RandomState(14)
+
+# Load the dataset
+loblolly = pd.read_csv('loblollySample.csv')
+
+# Initialize the errors array
+bootstrapErrors = []
+
+# Generate the bootstrap samples
+for i in range(0, 46):
+    # Create the bootstrap sample and the out-of-bag sample
+    boot = resample(loblolly, replace = True, n_samples = 36, random_state = rng)
+    oob = loblolly[~loblolly.index.isin(boot.index)]
+    
+    # Fit a linear model to the bootstrap sample
+    XBoot = boot[['age']]
+    yBoot = boot[['height']]
+    linModel = LinearRegression()
+    linModel.fit(XBoot, yBoot)
+    
+    # Make predictions
+    # Predict y values for the out-of-bag sample
+    XOob = oob[['age']]
+    YOob = oob[['height']]
+    YOobPredicted = linModel.predict(XOob)
+    
+    # Calculate and store the error
+    bootError = mean_squared_error(YOob, YOobPredicted)
+    bootstrapErrors.append(bootError)
+
+# Evaluate and print accuracy
+print('Mean of bootstrap errors =', np.mean(bootstrapErrors))
+print('Standard deviation of bootstrap errors =', np.std(bootstrapErrors))
+
+#output
+#Mean of bootstrap errors = 8.190705285352658
+#Standard deviation of bootstrap errors = 1.5239321848382594
+
+#Interpretation
+#Mean of bootstrap errors = 8.19:
+#This is the average mean squared error (MSE) across all 46 bootstrap samples. It represents how well the model generalizes on OOB data on average.
+
+#Standard deviation of bootstrap errors = 1.52:
+#This indicates the variability in the model's performance. A smaller standard deviation suggests that the model's performance is relatively consistent across bootstrap samples.
+
