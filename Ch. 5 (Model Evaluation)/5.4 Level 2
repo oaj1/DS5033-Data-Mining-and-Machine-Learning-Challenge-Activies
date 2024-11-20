@@ -1,0 +1,51 @@
+#Researchers collected measurements from loblolly pines.
+#Generate out-of-bag samples using the dataset without the data used for the bootstrap sample. The format is: datasetName[NOT datasetName.index.isin(bootstrapName.index)].
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.utils import resample
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+
+rng = np.random.RandomState(37)
+
+# Load the dataset
+loblolly = pd.read_csv('loblollySample.csv')
+
+# Initialize the errors array
+bootstrapErrors = []
+
+# Generate the bootstrap samples
+for i in range(0, 47):
+    # Create the bootstrap sample and the out-of-bag sample
+    bootstrap = resample(loblolly, replace=True, n_samples=44, random_state=rng)
+    oob = loblolly[~loblolly.index.isin(bootstrap.index)]
+    
+    # Fit a linear model to the bootstrap sample
+    XBoot = bootstrap[['age']]
+    yBoot = bootstrap[['height']]
+    linModel = LinearRegression()
+    linModel.fit(XBoot, yBoot)
+    
+    # Make predictions
+    # Predict y values for the out-of-bag sample
+    XOob = oob[['age']]
+    YOob = oob[['height']]
+    YOobPredicted = linModel.predict(XOob)
+    
+    # Calculate and store the error
+    bootError = mean_squared_error(YOob, YOobPredicted)
+    bootstrapErrors.append(bootError)
+
+# Evaluate and print accuracy
+print('Mean of bootstrap errors =', np.mean(bootstrapErrors))
+print('Standard deviation of bootstrap errors =', np.std(bootstrapErrors))
+
+#output
+#Mean of bootstrap errors = 7.690867305213992
+#Standard deviation of bootstrap errors = 1.7268853243303652
+
+#interpretation
+#A mean MSE of 7.69 means that, on average, the predictions made by the linear regression model trained on bootstrap samples deviate from the true OOB values by approximately 7.69 squared height units.
+#This value (1.7268853243303652) quantifies the variability (spread) of the MSE values across the 47 bootstrap samples.
