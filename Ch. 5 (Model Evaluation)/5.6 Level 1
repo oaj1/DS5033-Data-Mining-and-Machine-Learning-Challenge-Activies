@@ -1,0 +1,71 @@
+#Researchers collected measurements from loblolly pines.
+#Split the dataset into train and test datasets using the train_test_split() method with the following parameters, respectively:
+#the original data frame
+#the test_size parameter set to the test proportion
+#the random_state parameter set to rng
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import train_test_split, cross_val_score
+
+rng = np.random.RandomState(26)
+
+# Load the dataset
+loblolly = pd.read_csv('loblollySample.csv')
+
+# Split dataset into training data and testing data
+trainDataName, testDataName = train_test_split(loblolly, test_size=0.2,random_state=rng)
+
+# Store relevant columns as variables
+X = trainDataName[['age']]
+y = trainDataName[['height']]
+
+# Initialize the model -- quadratic polynomial regression model
+polyFeatures = PolynomialFeatures(degree=2, include_bias=False)
+xPoly = polyFeatures.fit_transform(X)
+quadPolyRegModel = LinearRegression()
+
+# Evaluate accuracy
+# neg_mean_square_error is the negative MSE, so append a - so the scores are positive.
+tenFoldScores = -cross_val_score(quadPolyRegModel, X, y, scoring='neg_mean_squared_error', cv=10)
+
+print('ten-fold average MSE =', np.mean(tenFoldScores), '\n', tenFoldScores)
+
+# neg_mean_square_error is the negative MSE, so append a minus so the scores are positive.
+LOOCVScores = -cross_val_score(quadPolyRegModel, X, y, scoring='neg_mean_squared_error', cv=len(X))
+
+print('\nk-fold average MSE =', np.mean(LOOCVScores), '\n', LOOCVScores)
+
+
+#output
+#ten-fold average MSE = 10.349118085036997 
+# [ 3.81643654 10.48632219  5.66050057 15.00143109 15.84936842  8.14530584
+#  9.34117822 22.42078777  4.81195967  7.95789054]
+
+#k-fold average MSE = 10.606862190504373 
+# [1.95141796e-01 5.03281935e+00 8.64036964e+00 5.87466819e-01
+# 8.97545247e+00 1.02701604e+01 1.85248334e+01 1.55825142e+00
+# 6.65151686e+00 5.97518078e+00 9.47577288e+00 1.44762808e-01
+# 7.36989736e+00 2.70386092e+00 1.53049227e+01 4.05605416e+01
+# 5.41371192e+00 3.26675942e+00 1.58845952e+01 3.11146340e+01
+# 1.92925069e+01 1.07857247e+01 3.17733623e+00 2.77417517e+00
+# 2.84721492e+00 3.04670209e-02 2.47573767e+01 7.25659139e+00
+# 7.55700653e+00 4.42303457e+01 3.28136570e+01 1.46673035e+01
+# 1.35842415e+01 6.95265620e-02 1.55195690e+00 5.65127380e+00
+# 5.40283481e-01 3.60720139e+00 2.59994610e+01 5.43018556e+00]
+
+
+#Interpretation
+#The average of the mean squared errors (MSEs) across 10 folds is 10.35.
+#Individual Fold MSEs: [ 3.82, 10.49, 5.66, 15.00, 15.85, 8.15, 9.34, 22.42, 4.81, 7.96 ]:
+#These values represent the MSE for each of the 10 folds.
+#Lower MSE values indicate better model performance.
+
+#k-fold average MSE = 10.61:
+#The average MSE across all folds (each data point is a test set once) is 10.61. This is slightly higher than the 10-fold average MSE.
+#Individual Fold MSEs:
+#[0.195, 5.03, 8.64, 0.59, 8.98, 10.27, 18.52, 1.56, ...]:
+#These are the MSEs for each individual fold (one for every data point in the training set).
