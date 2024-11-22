@@ -1,0 +1,85 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. Using a computer vision process, 16 features of each bean were extracted.
+
+#Define a set of 8 cross-validation folds. Set the random_state parameter to 66 and shuffle to True.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.model_selection import cross_validate
+from sklearn.naive_bayes import GaussianNB
+from sklearn.model_selection import KFold
+
+# Load the dry beans dataset
+beans = pd.read_csv('Dry_Bean_Data.csv')
+
+X = beans[['Eccentricity', 'Compactness']]
+y = beans[['Class']]
+
+# Scale the input features
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+# Define a set of 8 cross-validation folds
+kf = KFold(n_splits=8, random_state=66, shuffle = True)
+
+# Initialize the linear discriminant analysis model with two components
+beansLDAModel = LinearDiscriminantAnalysis(n_components=2)
+
+# Fit linear discriminant analysis model with cross-validation
+modelLDAResults = cross_validate(beansLDAModel, X, np.ravel(y), cv=kf)
+
+beansLDAScores = modelLDAResults['test_score']
+
+# View accuracy for each fold
+print('Linear discriminant analysis scores:', beansLDAScores.round(3))
+
+# Calculate descriptive statistics
+print('Mean:', beansLDAScores.mean().round(3))
+print('SD:', beansLDAScores.std().round(3))
+
+# Initialize the Gaussian naive Bayes model
+modelNB = GaussianNB()
+
+# Fit Gaussian naive Bayes model with 8-fold cross-validation
+NBresults = cross_validate(modelNB, X, np.ravel(y), cv=kf)
+
+NBscores = NBresults['test_score']
+
+# View accuracy for each fold
+print('Gaussian naive Bayes scores:', NBscores.round(3))
+
+# Calculate descriptive statistics
+print('Mean:', NBscores.mean().round(3))
+print('SD:', NBscores.std().round(3))
+
+#output
+#Linear discriminant analysis scores: [0.769 0.462 0.462 0.615 0.5   0.5   0.25  0.417]
+#Mean: 0.497
+#SD: 0.141
+#Gaussian naive Bayes scores: [0.462 0.538 0.308 0.538 0.5   0.583 0.25  0.417]
+#Mean: 0.45
+#SD: 0.11
+
+
+#Interpretation
+#For Linear Discriminant Analysis
+#Scores per fold
+#These represent the model's classification accuracy for each fold.
+#Mean Accuracy: 0.497 (49.7% average accuracy across folds).
+#Standard Deviation: 0.141 (14.1% variability in accuracy scores across folds).
+
+
+#For Gaussian naive Bayes analysis
+#Scores per fold
+#These represent classification accuracy for each fold using Naive Bayes.
+#Mean Accuracy: 0.45 (45% average accuracy across folds).
+#Standard Deviation: 0.11 (11% variability in accuracy scores across folds).
+
+#Performance Comparison:
+
+#LDA performed slightly better than Gaussian NB, with higher mean accuracy (49.7% vs. 45%).
+#However, LDA had higher variability (14.1% vs. 11%).
+#Model Suitability:
+#Both models performed modestly, indicating potential issues with feature selection or model fit for this dataset.
