@@ -1,0 +1,60 @@
+#Calculate the mean squared errors for 
+#-fold cross-validation with 
+# = 10. Use the negative of the cross_val_score() method with the following parameters, respectively:
+#the model variable
+#x_variable
+#y_variable
+#the scoring parameter set to neg_mean_squared_error
+#the cv parameter set to 10
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.model_selection import train_test_split, cross_val_score
+
+rng = np.random.RandomState(42)
+
+# Load the dataset
+pines = pd.read_csv('pinesSample.csv')
+
+# Split dataset into training data and testing data
+trainingDataName, testingDataName = train_test_split(pines, test_size=0.2, random_state=rng)
+
+# Store relevant columns as variables
+X = trainingDataName[['age']]
+y = trainingDataName[['height']]
+
+# Initialize the model -- quadratic polynomial regression model
+polyFeatures = PolynomialFeatures(degree=2, include_bias=False)
+xPoly = polyFeatures.fit_transform(X)
+polynomialRegressionModel = LinearRegression()
+
+# Evaluate accuracy
+# neg_mean_square_error is the negative MSE, so append a minus so the scores are positive.
+tenFoldScores = -cross_val_score(polynomialRegressionModel,X,y, scoring = 'neg_mean_squared_error',cv=10)
+
+print('ten-fold average MSE =', np.mean(tenFoldScores), '\n', tenFoldScores)
+
+# neg_mean_square_error is the negative MSE, so append a - so the scores are positive.
+LOOCVScores = -cross_val_score(polynomialRegressionModel, X, y, scoring='neg_mean_squared_error', cv=len(X))
+
+print('\nk-fold average MSE =', np.mean(LOOCVScores), '\n', LOOCVScores)
+
+#output:
+#ten-fold average MSE = 8.077427407158416 
+# [ 4.31932627  8.83261749  5.66850127  8.82479561 10.88024746 18.76807633
+#  9.3332802   5.68541482  3.77694621  4.68506842]
+
+#k-fold average MSE = 8.214878581573947 
+# [1.90265591e+00 2.43673371e+00 2.64098557e+00 8.02600575e+00
+# 2.74270333e+01 2.08295921e+00 3.71366064e+00 1.65453691e+00
+# 1.56755322e-01 1.89307777e+01 9.68938098e-04 4.98360510e+00
+# 2.65019463e+01 6.47181430e+00 1.87266144e+00 2.35824596e+00
+# 2.21963571e+01 1.48047303e+01 1.84416124e+00 8.19058704e+00
+# 2.60637280e+00 6.90384689e+01 5.98710899e+00 1.42433735e-01
+# 6.07668017e-01 7.53404506e+00 2.65327325e+00 2.39033975e+01
+# 1.81374213e+00 1.62289514e+01 1.36095831e+00 4.25668924e+00
+# 1.26099527e+00 3.38118731e+00 9.69974185e+00 1.27636464e+00
+# 1.21345977e+00 1.22969702e+01 6.11498720e-06 5.13612706e+00]
