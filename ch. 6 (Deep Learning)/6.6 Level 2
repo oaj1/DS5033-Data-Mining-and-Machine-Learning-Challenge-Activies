@@ -1,0 +1,66 @@
+#This dataset contains observations from scans of tumors. Researchers at the University of Wisconsin collected data from image scans of breast mass cells. 
+#Cell radius, texture, perimeter, and other features describing shape and uniformity were recorded based on each image. Each image came from a biopsy of a benign or malignant breast tumor.
+#Standardize the input features in the dataframe X_train.
+#Initialize a multilayer perceptron for classification with learning_rate_init=0.1, max_iter=450, random_state=31.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn import metrics
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.preprocessing import StandardScaler
+
+# Load the breast cancer dataset
+cancer = pd.read_csv('WisconsinBreastCancerDatabase.csv')
+
+# Select input and output features
+X = cancer.drop(columns=['ID', 'Diagnosis', 'Smoothness mean'])
+y = cancer[['Diagnosis']]
+
+# Split the data into train and test datasets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=123)
+
+# Standardize the input feature values in X_train
+#Neural networks are sensitive to the scale of input features. StandardScaler standardizes each feature to have:
+#A mean of 0
+#A standard deviation of 1.
+standard_scaler = StandardScaler()
+X_train = standard_scaler.fit_transform(X_train)
+
+# Initialize a multilayer perceptron classifier with the specified parameters
+modelPerceptron = MLPClassifier(learning_rate_init=0.1, max_iter=450, random_state=31)
+
+# Fit multilayer perceptron classifier to X_train and y_train
+modelPerceptron.fit(X_train, np.ravel(y_train))
+
+# Neural network structure
+print("Number of total layers:", modelPerceptron.n_layers_)
+print("Number of hidden layers:", modelPerceptron.n_layers_ - 2)
+print("Number of outputs:", modelPerceptron.n_outputs_)
+
+# Print the minimum loss reached
+bestLoss = modelPerceptron.best_loss_
+print(bestLoss)
+
+#output
+#Number of total layers: 3
+#Number of hidden layers: 1
+#Number of outputs: 1
+#0.00047252037833956094
+
+#Interpretation
+#Number of total layers: 3:
+
+#Input layer
+#1 Hidden layer (default: 100 neurons)
+#Output layer (1 neuron for binary classification)
+#Number of hidden layers: 1:
+
+#The default configuration has one hidden layer.
+#Number of outputs: 1:
+
+#A single output neuron for binary classification.
+#0.00047252037833956094:
+
+#This is the minimum loss achieved during training. A very low loss indicates that the model fit the training data extremely well3.
