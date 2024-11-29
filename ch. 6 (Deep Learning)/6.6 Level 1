@@ -1,0 +1,39 @@
+#This dataset contains observations from scans of tumors. Researchers at the University of Wisconsin collected data from image scans of breast mass cells. 
+#Cell radius, texture, perimeter, and other features describing shape and uniformity were recorded based on each image. Each image came from a biopsy of a benign or malignant breast tumor.
+#Initialize a multilayer perceptron for classification with learning_rate_init=0.01, max_iter=150, random_state=28.
+
+# Import packages and functions
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+
+# Load the breast cancer dataset
+cancer = pd.read_csv('WisconsinBreastCancerDatabase.csv')
+
+# Select input and output features
+X = cancer.drop(columns=['ID', 'Diagnosis', 'Radius worst'])
+y = cancer[['Diagnosis']]
+
+# Split the data into train and test datasets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=123)
+
+# Initialize a multilayer perceptron classifier with learning_rate_init=0.01, max_iter=150, and random_state=28
+modelPerceptron = MLPClassifier(learning_rate_init=0.01,max_iter=150, random_state=28)
+
+# Fit multilayer perceptron classifier to X_train and y_train
+modelPerceptron.fit(X_train, np.ravel(y_train))
+
+# Print the minimum loss reached
+bestLoss = modelPerceptron.best_loss_
+print(bestLoss)
+
+
+#output
+#0.5180416681828932
+
+#Interpretation
+#modelPerceptron.best_loss_: Returns the lowest loss (error) achieved during training.
+#Loss Function: Measures how well the model's predictions match the true labels.
+#Output: 0.5180416681828932 indicates the minimum loss the model reached during training. A lower value means better training performance.
+#A value of 0.518 suggests the model could still improve, as it indicates a moderate level of error.
