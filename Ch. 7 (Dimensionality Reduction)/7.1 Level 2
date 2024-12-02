@@ -1,0 +1,48 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. Using a computer vision process, 16 features of each bean were extracted.
+#Construct a function to perform recursive feature elimination with n_features_to_select=3 using the initialized estimator.
+#Construct a pipeline that scales the data and performs RFE.
+#Fit the model at the end of the pipeline using the training set.
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.feature_selection import RFE
+from sklearn.pipeline import Pipeline
+
+# Load the dry beans dataset
+bean = pd.read_csv('Dry_Bean_Dataset.csv')
+
+X = bean.drop(['Class'], axis=1)
+y = bean[['Class']]
+
+# Split the data into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+
+# Construct a scaler
+scalerFeat = StandardScaler()
+
+# Construct an estimator
+beanEstimator = LinearDiscriminantAnalysis()
+
+# Perform recursive feature elimination with n_features_to_select=3 using the given estimator
+rfeModel = RFE(n_features_to_select=3, estimator=beanEstimator) 
+
+# Construct a pipeline that scales the data and performs RFE
+pipeRFE = Pipeline(steps=[('scaler', scalerFeat), ('feature_selection', rfeModel)  ])
+
+# Fit the model at the end of the pipeline using the training set
+pipeRFE.fit (X_train,np.ravel(y_train))
+
+# Print classification score
+print(pipeRFE.score(X_test, y_test))
+
+
+#output
+0.9
+
+#Interpretation
+#The output indicates that the pipeline, which integrates feature scaling and recursive feature elimination (RFE), achieved a classification accuracy of 90% on the test dataset.
+
