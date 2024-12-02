@@ -1,0 +1,59 @@
+#Two researchers collected high-resolution images of 13,611 grains of seven varieties of dry beans. Using a computer vision process, 16 features of each bean were extracted.
+
+#Construct a forward sequential feature selector with n_features_to_select='auto' and tol=None using the initialized estimator.
+#Construct a pipeline that scales the data and performs forward SFS with a linear discriminant analysis model.
+#Fit the model at the end of the pipeline using the training set.
+
+# Import packages and functions
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.feature_selection import SequentialFeatureSelector
+from sklearn.pipeline import Pipeline
+
+# Load the dry beans dataset
+df = pd.read_csv('Dry_Bean_Dataset.csv')
+
+X = df.drop(['Class'], axis=1)
+y = df[['Class']]
+# Split the data into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+
+# Construct a scaler
+scalerFeat = StandardScaler()
+
+# Construct an estimator
+beanEstimator = LinearDiscriminantAnalysis()
+
+# Initialize a linear discriminant analysis model
+modelLDA = LinearDiscriminantAnalysis()
+
+# Construct a forward sequential feature selector using the initialized estimator
+sfsBean = SequentialFeatureSelector(beanEstimator, direction='forward', n_features_to_select='auto', tol=None)
+
+# Construct a pipeline that scales the data and performs forward SFS and linear discriminant analysis
+sfsPipe = Pipeline(steps=[('scaler',scalerFeat),('sfs', sfsBean), ('model',modelLDA)])
+
+# Fit the model at the end of the pipeline using the training set
+sfsPipe.fit(X_train,np.ravel(y_train))
+
+# Print the selected features 
+print(X.columns[sfsPipe.named_steps['sfs'].support_])
+
+# Print classification score
+print(sfsPipe.score(X_test, y_test))
+
+
+#output
+#Index(['Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'ConvexArea',
+#       'EquivDiameter', 'ShapeFactor1', 'ShapeFactor2'],
+#      dtype='object')
+#0.89
+
+#Interpretation
+#The forward sequential feature selector (SequentialFeatureSelector) automatically selected the following features: 'Perimeter', 'MajorAxisLength', 'MinorAxisLength', 'ConvexArea', 'EquivDiameter', 'ShapeFactor1', 'ShapeFactor2'
+#The classification accuracy on the test set was 0.89 (89%).
+#This indicates that the model generalizes well to unseen data when using the selected subset of features.
+#An accuracy of 89% is reasonable, suggesting the model effectively separates the seven dry bean classes.
